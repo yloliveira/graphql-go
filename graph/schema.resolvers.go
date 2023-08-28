@@ -12,7 +12,16 @@ import (
 
 // CreateCategory is the resolver for the createCategory field.
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
-	panic(fmt.Errorf("not implemented: CreateCategory - createCategory"))
+	category, err := r.CategoryDB.Create(input.Title)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Category{
+		ID:    category.ID,
+		Title: category.Title,
+	}, nil
 }
 
 // CreateProduct is the resolver for the createProduct field.
