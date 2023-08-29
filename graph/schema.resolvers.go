@@ -31,7 +31,19 @@ func (r *mutationResolver) CreateProduct(ctx context.Context, input model.NewPro
 
 // Categories is the resolver for the categories field.
 func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, error) {
-	panic(fmt.Errorf("not implemented: Categories - categories"))
+	categories, err := r.CategoryDB.FindAll()
+
+	if err != nil {
+		return nil, err
+	}
+
+	var categoriesModel []*model.Category
+
+	for _, category := range categories {
+		categoriesModel = append(categoriesModel, &model.Category{ID: category.ID, Title: category.Title})
+	}
+
+	return categoriesModel, nil
 }
 
 // Products is the resolver for the products field.
