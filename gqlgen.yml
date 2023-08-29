@@ -74,6 +74,12 @@ autobind:
 # modelgen, the others will be allowed when binding to fields. Configure them to
 # your liking
 models:
+  Category:
+    model:
+      - graphql-go/graph/model.Category
+  Product:
+    model:
+      - graphql-go/graph/model.Product
   ID:
     model:
       - github.com/99designs/gqlgen/graphql.ID

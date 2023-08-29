@@ -2,12 +2,6 @@
 
 package model
 
-type Category struct {
-	ID       string     `json:"id"`
-	Title    string     `json:"title"`
-	Products []*Product `json:"products"`
-}
-
 type NewCategory struct {
 	Title string `json:"title"`
 }
@@ -16,11 +10,4 @@ type NewProduct struct {
 	Title      string `json:"title"`
 	Price      int    `json:"price"`
 	CategoryID string `json:"categoryId"`
-}
-
-type Product struct {
-	ID       string    `json:"id"`
-	Title    string    `json:"title"`
-	Price    int       `json:"price"`
-	Category *Category `json:"category"`
 }

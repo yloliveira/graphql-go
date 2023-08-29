@@ -9,6 +9,23 @@ import (
 	"graphql-go/graph/model"
 )
 
+// Products is the resolver for the products field.
+func (r *categoryResolver) Products(ctx context.Context, obj *model.Category) ([]*model.Product, error) {
+	products, err := r.ProductDB.FindByCategoryID(obj.ID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var productsModel []*model.Product
+
+	for _, product := range products {
+		productsModel = append(productsModel, &model.Product{ID: product.ID, Title: product.Title, Price: product.Price})
+	}
+
+	return productsModel, nil
+}
+
 // CreateCategory is the resolver for the createCategory field.
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
 	category, err := r.CategoryDB.Create(input.Title)
@@ -72,11 +89,15 @@ func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) 
 	return productsModel, nil
 }
 
+// Category returns CategoryResolver implementation.
+func (r *Resolver) Category() CategoryResolver { return &categoryResolver{r} }
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+type categoryResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
