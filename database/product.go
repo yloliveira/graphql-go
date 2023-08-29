@@ -28,3 +28,24 @@ func (p *Product) Create(title string, price int, categoryID string) (Product, e
 
 	return Product{ID: id, Title: title, Price: price, CategoryID: categoryID}, nil
 }
+
+func (p *Product) FindAll() ([]Product, error) {
+	rows, err := p.db.Query("SELECT id, title, price, category_id FROM products")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	products := []Product{}
+
+	for rows.Next() {
+		var id, title, categoryID string
+		var price int
+		if err := rows.Scan(&id, &title, &price, &categoryID); err != nil {
+			return nil, err
+		}
+		products = append(products, Product{ID: id, Title: title, Price: price, CategoryID: categoryID})
+	}
+
+	return products, nil
+}

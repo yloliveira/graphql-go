@@ -6,7 +6,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"graphql-go/graph/model"
 )
 
@@ -58,7 +57,19 @@ func (r *queryResolver) Categories(ctx context.Context) ([]*model.Category, erro
 
 // Products is the resolver for the products field.
 func (r *queryResolver) Products(ctx context.Context) ([]*model.Product, error) {
-	panic(fmt.Errorf("not implemented: Products - products"))
+	products, err := r.ProductDB.FindAll()
+
+	if err != nil {
+		return nil, err
+	}
+
+	var productsModel []*model.Product
+
+	for _, product := range products {
+		productsModel = append(productsModel, &model.Product{ID: product.ID, Title: product.Title, Price: product.Price})
+	}
+
+	return productsModel, nil
 }
 
 // Mutation returns MutationResolver implementation.
