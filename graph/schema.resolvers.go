@@ -26,7 +26,17 @@ func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCa
 
 // CreateProduct is the resolver for the createProduct field.
 func (r *mutationResolver) CreateProduct(ctx context.Context, input model.NewProduct) (*model.Product, error) {
-	panic(fmt.Errorf("not implemented: CreateProduct - createProduct"))
+	product, err := r.ProductDB.Create(input.Title, input.Price, input.CategoryID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.Product{
+		ID:    product.ID,
+		Title: product.Title,
+		Price: product.Price,
+	}, nil
 }
 
 // Categories is the resolver for the categories field.
